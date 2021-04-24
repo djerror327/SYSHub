@@ -11,12 +11,12 @@ body {
     float: left;
     right: 20cm;
     background-color: #171717;
-    opacity: 0.8;
+    opacity: 0.9;
     padding: .2cm;
     width: 4cm;
     height: 4cm;
     border: thin #171717 solid;
-    color: white;
+    color: #fafafa;
     margin: .1cm;
     font-size: small;
     overflow-x: auto;
@@ -26,12 +26,21 @@ body {
     text-align: center;
 }
 
-.tileimage{
-    padding-top: 30%;
+.tileimage {
+    padding-top: 20%;
     width: 50%;
+    opacity: 0.8;
 }
 
 #content {
-    padding-top: 10%;
+    padding-top: 8%;
     padding-left: 20%;
+}
+
+#header {
+    /* padding-left: 40%; */
+    font-weight: bolder;
+    font-size: xx-large;
+    color: #fafafa;
+    opacity: 0.8;
 }
