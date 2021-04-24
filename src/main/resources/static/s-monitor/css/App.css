@@ -1,14 +1,14 @@
 .body {
     color: #fafafa;
-    background-color: #010101;
+    /* background-color: #010101; */
     font-family: Arial, Helvetica, sans-serif;
 }
 
 body {
     background-image: url("../img/background.jpg");
-    background-position: center;
-    background-repeat: no-repeat;
+    /* background-position: center; */
     background-size: cover;
+    background-repeat: no-repeat;
     height: 100%;
 }
 
@@ -33,11 +33,13 @@ body {
     background-color: #171717;
     opacity: 0.9;
     padding: .2cm;
-    width: 15cm;
-    height: 10cm;
+    /* width: 15cm;
+    height: 10cm; */
+    width: 8cm;
+    height: 8cm;
     border: thin #171717 solid;
     margin: .1cm;
-    font-size: small;
+    font-size: xx-small;
     overflow-x: auto;
     overflow-y: auto;
     white-space: nowrap;
