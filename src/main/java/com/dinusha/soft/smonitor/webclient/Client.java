@@ -1,4 +1,4 @@
-package com.dinusha.soft.sonarqube.webclient;
+package com.dinusha.soft.smonitor.webclient;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;

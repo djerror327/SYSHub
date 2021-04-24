@@ -1,9 +1,9 @@
-package com.dinusha.soft.sonarqube.service;
+package com.dinusha.soft.smonitor.service;
 
-import com.dinusha.soft.sonarqube.utills.JsonUtil;
-import com.dinusha.soft.sonarqube.utills.Paginate;
-import com.dinusha.soft.sonarqube.utills.SonarAuthHeader;
-import com.dinusha.soft.sonarqube.webclient.Client;
+import com.dinusha.soft.smonitor.utills.JsonUtil;
+import com.dinusha.soft.smonitor.utills.Paginate;
+import com.dinusha.soft.smonitor.utills.SonarAuthHeader;
+import com.dinusha.soft.smonitor.webclient.Client;
 import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;

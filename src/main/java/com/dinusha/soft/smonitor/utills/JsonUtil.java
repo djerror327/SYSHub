@@ -1,4 +1,4 @@
-package com.dinusha.soft.sonarqube.utills;
+package com.dinusha.soft.smonitor.utills;
 
 import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;

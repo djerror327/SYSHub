@@ -1,6 +1,6 @@
-package com.dinusha.soft.sonarqube.controller;
+package com.dinusha.soft.smonitor.controller;
 
-import com.dinusha.soft.sonarqube.service.SonarProjectService;
+import com.dinusha.soft.smonitor.service.SonarProjectService;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

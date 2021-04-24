@@ -1,4 +1,4 @@
-package com.dinusha.soft.sonarqube.utills;
+package com.dinusha.soft.smonitor.utills;
 
 import org.json.simple.JSONObject;
 import org.springframework.stereotype.Component;

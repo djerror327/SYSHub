@@ -1,8 +1,8 @@
-package com.dinusha.soft.sonarqube.cache;
+package com.dinusha.soft.smonitor.cache;
 
-import com.dinusha.soft.sonarqube.service.AnalysisService;
-import com.dinusha.soft.sonarqube.service.SCMService;
-import com.dinusha.soft.sonarqube.utills.JsonUtil;
+import com.dinusha.soft.smonitor.service.AnalysisService;
+import com.dinusha.soft.smonitor.service.ViolationService;
+import com.dinusha.soft.smonitor.utills.JsonUtil;
 import org.apache.log4j.Logger;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -22,12 +22,12 @@ import java.util.function.BinaryOperator;
 import java.util.function.Function;
 
 @Component
-public class SCMCache {
+public class ViolationCache {
 
-    private static final Logger logger = Logger.getLogger(SCMCache.class);
+    private static final Logger logger = Logger.getLogger(ViolationCache.class);
 
     @Autowired
-    private SCMService scmService;
+    private ViolationService violationService;
     @Autowired
     private JsonUtil jsonUtil;
     @Autowired
@@ -37,29 +37,30 @@ public class SCMCache {
     @Value("${cache.enable}")
     private String cacheEnable;
 
-    private final BinaryOperator<String> createSCMCache = (projectKey, date) -> {
+
+    private final BinaryOperator<String> createViolationCache = (projectKey, date) -> {
         //get json from api
-        List<Object> scmList = scmService.getCommits.apply(projectKey, date);
-        String jsonSCMnArray = jsonUtil.listToJsonStringArray.apply(scmList);
+        List<Object> violationList = violationService.getViolation.apply(projectKey, date);
+        String jsonViolationArray = jsonUtil.listToJsonStringArray.apply(violationList);
 
         //save it into json file in the cache folder
-        logger.info("Creating SCM cache : project key : " + projectKey + " : date : " + date);
-        logger.debug("Writing into SCM cache : " + jsonSCMnArray);
-        commonCache.createCacheFile(jsonSCMnArray, projectKey, date, "scm");
-        return jsonSCMnArray;
+        logger.info("Creating violation cache : project key : " + projectKey + " : date : " + date);
+        logger.debug("Writing into violation cache : " + jsonViolationArray);
+        commonCache.createCacheFile(jsonViolationArray, projectKey, date, "violation");
+        return jsonViolationArray;
     };
 
-    private final BiPredicate<String, String> checkSCMCache = (String projectKey, String date) -> {
+    private final BiPredicate<String, String> checkViolationCache = (String projectKey, String date) -> {
         String folderPAth = commonCache.getCachedPath.get() + projectKey + "/" + date;
-        Path scmPath = Paths.get(folderPAth + "/scm.json");
-        logger.debug("Checking SCM cache json exist : projectKey: " + projectKey + " +date : " + date + " path : " + scmPath);
-        return Files.exists(scmPath);
+        Path violationPath = Paths.get(folderPAth + "/violation.json");
+        logger.debug("Checking violation cache json exist : projectKey: " + projectKey + " +date : " + date + " path : " + violationPath);
+        return Files.exists(violationPath);
     };
 
-    private final Function<String, Map<String, String>> getCachedData = scm -> {
+    private final Function<String, Map<String, String>> getCachedData = violation -> {
         Map<String, String> cachedFileData = new HashMap<>();
-        cachedFileData.put("scm", scm);
-        logger.debug("SCM reading completed!");
+        cachedFileData.put("violation", violation);
+        logger.debug("Violations reading completed!");
         return cachedFileData;
     };
 
@@ -77,7 +78,8 @@ public class SCMCache {
         }
         //cache analysis
         String folderPAth = commonCache.getCachedPath.get() + projectKey + "/branchAnalysis.json";
-        String scmPath = commonCache.getCachedPath.get() + projectKey + "/" + date + "/" + "scm.json";
+        String violationPath = commonCache.getCachedPath.get() + projectKey + "/" + date + "/" + "violation.json";
+
         if (commonCache.checkCacheFolderExist.getAsBoolean() && commonCache.checkCacheFile.test(folderPAth)) {
             StringBuilder analysisFileContent = commonCache.readCacheFile.apply(folderPAth);
             JSONObject cachedJsonProject = jsonUtil.stringToJsonObject.apply(analysisFileContent.toString());
@@ -94,13 +96,13 @@ public class SCMCache {
                     logger.debug("Checking date milliseconds are less than API milliseconds");
                     if (timestamp.get("dateMillis") < timestamp.get("apiMillis")) {
                         //check cache available the return else create cache and return
-                        if (checkSCMCache.test(projectKey, date)) {
-                            return getCachedData.apply(String.valueOf(commonCache.readCacheFile.apply(scmPath)));
+                        if (checkViolationCache.test(projectKey, date)) {
+                            return getCachedData.apply(String.valueOf(commonCache.readCacheFile.apply(violationPath)));
                         } else {
                             //create branch analysis cache json
                             commonCache.createBranchAnalysisCacheJson.accept(projectKey);
-                            String scm = createSCMCache.apply(projectKey, date);
-                            return getCachedData.apply(scm);
+                            String violation = createViolationCache.apply(projectKey, date);
+                            return getCachedData.apply(violation);
                         }
                     } else if (timestamp.get("dateMillis").equals(timestamp.get("apiMillis"))) {
                         logger.debug("Checking date milliseconds and API milliseconds are equal");
@@ -111,9 +113,9 @@ public class SCMCache {
                             //create cache
                             //create branch analysis cache json
                             commonCache.createBranchAnalysisCacheJson.accept(projectKey);
-                            String scm = createSCMCache.apply(projectKey, date);
+                            String violation = createViolationCache.apply(projectKey, date);
                             //create branch analysis cache json
-                            return getCachedData.apply(scm);
+                            return getCachedData.apply(violation);
                         } else {
                             //check api branch analysis and cached jason file timestamp. if there is time mismatch then recreate cache
                             for (Object cachedKey : cachedJsonBranches.keySet()) {
@@ -124,34 +126,33 @@ public class SCMCache {
                                     logger.debug("Checking date milliseconds are less than API milliseconds for current month");
                                     //create branch analysis cache json
                                     commonCache.createBranchAnalysisCacheJson.accept(projectKey);
-                                    String scm = createSCMCache.apply(projectKey, date);
+                                    String violation = createViolationCache.apply(projectKey, date);
                                     //create branch analysis cache json
-                                    return getCachedData.apply(scm);
+                                    return getCachedData.apply(violation);
                                 }
-
                             }
-                            if (checkSCMCache.test(projectKey, date)) {
+                            if (checkViolationCache.test(projectKey, date)) {
                                 logger.debug("Checking cache data is available for current month. return cached data");
-                                return getCachedData.apply(String.valueOf(commonCache.readCacheFile.apply(scmPath)));
+                                return getCachedData.apply(String.valueOf(commonCache.readCacheFile.apply(violationPath)));
                             }
                             //if cache file not available for current month
                             else {
                                 //create branch analysis cache json
                                 logger.debug("No cache data is available for current month. creating cache for current month");
                                 commonCache.createBranchAnalysisCacheJson.accept(projectKey);
-                                String scm = createSCMCache.apply(projectKey, date);
+                                String violation = createViolationCache.apply(projectKey, date);
                                 //create branch analysis cache json
-                                return getCachedData.apply(scm);
+                                return getCachedData.apply(violation);
                             }
                         }
                     }
                     //ui timestamp is greater than api timestamp
                     else {
-                        logger.debug("Scanning SCM for future date. Directly reading from API");
-                        List<Object> scmAPI = scmService.getCommits.apply(projectKey, date);
-                        JSONArray jsonArrSCM = jsonUtil.listToJsonArray.apply(scmAPI);
+                        logger.debug("Scanning violations for future date. Directly reading from API");
+                        List<Object> violationAPI = violationService.getViolation.apply(projectKey, date);
+                        JSONArray jsonArrViolation = jsonUtil.listToJsonArray.apply(violationAPI);
                         //create cache file
-                        return getCachedData.apply(jsonArrSCM.toJSONString());
+                        return getCachedData.apply(jsonArrViolation.toJSONString());
                     }
                 }
             }
@@ -160,24 +161,21 @@ public class SCMCache {
             //create branch analysis cache json
             commonCache.createBranchAnalysisCacheJson.accept(projectKey);
             //if cache folder is not available re create cache
-            String scm = createSCMCache.apply(projectKey, date);
-            return getCachedData.apply(scm);
+            String violation = createViolationCache.apply(projectKey, date);
+            return getCachedData.apply(violation);
         }
         return null;
     };
 
-    public final BiFunction<String, String, Map<String, String>> checkCacheEnableSCM = (projectKey, date) -> {
+    public final BiFunction<String, String, Map<String, String>> checkCacheEnableViolation = (projectKey, date) -> {
         if (cacheEnable.equals("true")) {
-            logger.debug("Cache enable for SCM check : true");
+            logger.debug("Cache enable for violation check : true");
             return checkAnalysisCache.apply(projectKey, date);
         } else if (cacheEnable.equals("false")) {
-            logger.debug("Cache enable for SCM check : false");
-            List<Object> scmAPI = scmService.getCommits.apply(projectKey, date);
-            JSONArray jsonArrSCM = jsonUtil.listToJsonArray.apply(scmAPI);
-            //create cache file
-            Map<String, String> cachedFileData = new HashMap<>();
-            cachedFileData.put("scm", jsonArrSCM.toJSONString());
-            return cachedFileData;
+            logger.debug("Cache enable for violation check : false");
+            List<Object> violationAPI = violationService.getViolation.apply(projectKey, date);
+            JSONArray jsonArrViolation = jsonUtil.listToJsonArray.apply(violationAPI);
+            return getCachedData.apply(jsonArrViolation.toJSONString());
         }
         return null;
     };

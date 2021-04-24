@@ -1,7 +1,7 @@
-package com.dinusha.soft.sonarqube.cache;
+package com.dinusha.soft.smonitor.cache;
 
-import com.dinusha.soft.sonarqube.service.AnalysisService;
-import com.dinusha.soft.sonarqube.utills.JsonUtil;
+import com.dinusha.soft.smonitor.service.AnalysisService;
+import com.dinusha.soft.smonitor.utills.JsonUtil;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.json.simple.JSONObject;

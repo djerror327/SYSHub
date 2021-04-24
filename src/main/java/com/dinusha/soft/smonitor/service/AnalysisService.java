@@ -1,8 +1,8 @@
-package com.dinusha.soft.sonarqube.service;
+package com.dinusha.soft.smonitor.service;
 
-import com.dinusha.soft.sonarqube.utills.JsonUtil;
-import com.dinusha.soft.sonarqube.utills.SonarAuthHeader;
-import com.dinusha.soft.sonarqube.webclient.Client;
+import com.dinusha.soft.smonitor.utills.JsonUtil;
+import com.dinusha.soft.smonitor.utills.SonarAuthHeader;
+import com.dinusha.soft.smonitor.webclient.Client;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

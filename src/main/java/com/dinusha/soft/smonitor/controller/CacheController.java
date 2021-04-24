@@ -1,6 +1,6 @@
-package com.dinusha.soft.sonarqube.controller;
+package com.dinusha.soft.smonitor.controller;
 
-import com.dinusha.soft.sonarqube.cache.CommonCache;
+import com.dinusha.soft.smonitor.cache.CommonCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
