@@ -5,7 +5,7 @@
 }
 
 body {
-    background-image: url("../img/background.jpg");
+    background-image: url("../../img/backround.jpg");
     /* background-position: center; */
     background-size: cover;
     background-repeat: no-repeat;
@@ -29,7 +29,7 @@ body {
 
 .tile {
     float: left;
-    border-radius: 15px;
+    /* border-radius: 15px; */
     background-color: #171717;
     opacity: 0.9;
     padding: .2cm;
