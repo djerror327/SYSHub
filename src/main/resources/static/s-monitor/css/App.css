@@ -15,6 +15,7 @@ body {
 .loadingGif {
     position: absolute;
     z-index: 1;
+    opacity: 1.0;
 }
 
 .lodingGifContainer {
@@ -24,7 +25,7 @@ body {
 #btnSearch {
     background-color: #fafafa;
     color: #171717;
-    opacity: 0.9;
+    opacity: 1.0;
 }
 
 .tile {
@@ -47,11 +48,14 @@ body {
 
 .tileHeader {
     text-align: center;
+    opacity: 1.0;
 }
 
 .tileContent {
     text-align: left;
     padding: 5px;
+    opacity: 1.0;
+
 }
 
 #header {
@@ -60,12 +64,13 @@ body {
     color: #fafafa;
     text-align: left;
     padding-left: 8px;
-    opacity: 0.9;
+    opacity: 1.0;
     border-radius: 5px;
 }
 
 #AppTitle {
     padding-top: 0.6cm;
+    opacity: 1.0;
 }
 
 #searchBoxSection {
@@ -81,20 +86,20 @@ body {
     width: 145px;
     border-radius: 5px;
     height: 0.67cm;
-    opacity: 0.9;
+    opacity: 1.0;
 }
 
 .searchInputFiled {
     width: 170px;
     border-radius: 5px;
     height: 0.8cm;
-    opacity: 0.9;
+    opacity: 1.0;
 }
 
 #projectName {
     padding-left: 10px;
     margin-top: 25px;
-    opacity: 0.9;
+    opacity: 1.0;
 }
 
 /* Responsive layout - makes a two column-layout instead of four columns */
