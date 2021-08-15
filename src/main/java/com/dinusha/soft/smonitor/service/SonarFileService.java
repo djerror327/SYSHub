@@ -10,7 +10,9 @@ import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.UriUtils;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,8 +42,9 @@ public class SonarFileService {
         Map<String, List<String>> branchFiles = new HashMap<>();
 
         logger.info("Reading all files of SonarQube branch list");
+        String encodedProjectKey = UriUtils.encodeQueryParam(projectKey, StandardCharsets.UTF_8);
         for (String branch : branchesList) {
-            String pagingData = client.getWithAuthHeader.apply(sonarAuthHeaderService.authHeader.get(), host + "api/measures/component_tree?ps=500&component=" + projectKey + "&branch=" + branch + "&metricKeys=ncloc");
+            String pagingData = client.getWithAuthHeader.apply(sonarAuthHeaderService.authHeader.get(), host + "api/measures/component_tree?ps=500&component=" + encodedProjectKey + "&branch=" + branch + "&metricKeys=ncloc");
 
             JSONObject pageObj = jsonUtil.stringToJsonObject.apply(pagingData);
             //calculate paging count
@@ -54,7 +57,7 @@ public class SonarFileService {
             //loop all pages and collect violation data
             logger.debug("started to paginate");
             for (int page = 1; page <= recursionCount; page++) {
-                String fileObj = client.getWithAuthHeader.apply(sonarAuthHeaderService.authHeader.get(), host + "api/measures/component_tree?ps=500&component=" + projectKey + "&branch=" + branch + "&metricKeys=ncloc&p=" + page + "");
+                String fileObj = client.getWithAuthHeader.apply(sonarAuthHeaderService.authHeader.get(), host + "api/measures/component_tree?ps=500&component=" + encodedProjectKey + "&branch=" + branch + "&metricKeys=ncloc&p=" + page + "");
                 JSONObject jsonFiles = jsonUtil.stringToJsonObject.apply(fileObj);
                 JSONArray components = (JSONArray) jsonFiles.get("components");
                 logger.debug("Reading components");
@@ -64,8 +67,9 @@ public class SonarFileService {
                     // filter only files
                     if (qualifier.equals("FIL")) {
                         String filePath = componentObj.get("path").toString();
-                        logger.debug("Branch : " + branch + " file : " + filePath);
-                        files.add(filePath);
+                        String encodedFilePath = UriUtils.encodeQueryParam(filePath, StandardCharsets.UTF_8);
+                        logger.debug("Branch : " + branch + " file : " + encodedFilePath);
+                        files.add(encodedFilePath);
                     }
                 }
             }

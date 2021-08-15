@@ -9,7 +9,9 @@ import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.UriUtils;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
@@ -33,7 +35,9 @@ public class BranchService {
     public final Function<String, List<String>> getBranches = key -> {
 
         logger.debug("Retrieving branch data from API");
-        JSONObject branches = jsonUtil.stringToJsonObject.apply(client.getWithAuthHeader.apply(sonarAuthHeaderService.authHeader.get(), host + "api/project_branches/list?project=" + key));
+        String encodedKey = UriUtils.encodeQueryParam(key, StandardCharsets.UTF_8);
+        logger.debug("Encoded Project Key : " + encodedKey);
+        JSONObject branches = jsonUtil.stringToJsonObject.apply(client.getWithAuthHeader.apply(sonarAuthHeaderService.authHeader.get(), host + "api/project_branches/list?project=" + encodedKey));
         JSONArray branchList = (JSONArray) branches.get("branches");
         List<String> list = new ArrayList<>();
         branchList.forEach(payload -> list.add(((JSONObject) payload).get("name").toString()));

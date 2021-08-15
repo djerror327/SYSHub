@@ -9,7 +9,9 @@ import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.UriUtils;
 
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.BiFunction;
 
@@ -39,10 +41,11 @@ public class SCMService {
         HashMap<String, HashMap<String, Integer>> authorsBranch = new HashMap<>();
 
         logger.info("Reading sources in SonarQube branches");
+        String encodedProjectKey = UriUtils.encodeQueryParam(projectKey, StandardCharsets.UTF_8);
         for (Map.Entry<String, List<String>> branch : sonarSources.entrySet()) {
             for (String src : branch.getValue()) {
                 logger.debug("Reading sources for in branch : " + branch.getKey() + " : " + src);
-                String commits = client.getWithAuthHeader.apply(sonarAuthHeaderService.authHeader.get(), host + "api/sources/scm?key=" + projectKey + ":" + src + "");
+                String commits = client.getWithAuthHeader.apply(sonarAuthHeaderService.authHeader.get(), host + "api/sources/scm?key=" + encodedProjectKey + ":" + src + "");
                 JSONObject jsonCommits = jsonUtil.stringToJsonObject.apply(commits);
                 JSONArray scmArr = (JSONArray) jsonCommits.get("scm");
                 if (Objects.nonNull(scmArr)) {

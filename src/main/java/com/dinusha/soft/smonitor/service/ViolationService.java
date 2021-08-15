@@ -10,7 +10,9 @@ import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.UriUtils;
 
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -48,14 +50,15 @@ public class ViolationService {
         HashMap<String, Integer> authorsMap = new HashMap<>();
         HashMap<String, HashMap<String, Integer>> authorsBranch = new HashMap<>();
 
-        logger.debug("Reading violations of all branches of SonarQube project key : " + sonarProjectKey);
+        String encodedProjectKey = UriUtils.encodeQueryParam(sonarProjectKey, StandardCharsets.UTF_8);
+        logger.debug("Reading violations of all branches of SonarQube project key : " + encodedProjectKey);
         for (String branch : branchesList) {
 
             //initialize violation count to 0 for each branch
             violationCount = 0;
             //paging related part
             logger.debug("Reading paging sizes");
-            String pagingData = client.getWithAuthHeader.apply(sonarAuthHeaderService.authHeader.get(), host + "api/issues/search?projectKeys=" + sonarProjectKey + "&resolved=false&branch=" + branch + "&ps=500");
+            String pagingData = client.getWithAuthHeader.apply(sonarAuthHeaderService.authHeader.get(), host + "api/issues/search?projectKeys=" + encodedProjectKey + "&resolved=false&branch=" + branch + "&ps=500");
             JSONObject pageObj = jsonUtil.stringToJsonObject.apply(pagingData);
 
             //calculate paging count
@@ -73,7 +76,7 @@ public class ViolationService {
                     break;
                 }
 
-                String violationObj = client.getWithAuthHeader.apply(sonarAuthHeaderService.authHeader.get(), host + "api/issues/search?projectKeys=" + sonarProjectKey + "&resolved=false&branch=" + branch + "&ps=500&p=" + page + "");
+                String violationObj = client.getWithAuthHeader.apply(sonarAuthHeaderService.authHeader.get(), host + "api/issues/search?projectKeys=" + encodedProjectKey + "&resolved=false&branch=" + branch + "&ps=500&p=" + page + "");
                 JSONObject jsonViolation = jsonUtil.stringToJsonObject.apply(violationObj);
                 JSONArray issueArr = (JSONArray) jsonViolation.get("issues");
                 for (Object issue : issueArr) {
@@ -105,7 +108,7 @@ public class ViolationService {
             //set authors Map to 0 after analyzing specific branch
             authorsMap = new HashMap<>();
         }
-        logger.debug("Reading violations of all branches of SonarQube project key : " + sonarProjectKey + " completed");
+        logger.debug("Reading violations of all branches of SonarQube project key : " + encodedProjectKey + " completed");
 
         //creating final output
         HashMap<String, HashMap<String, Integer>> branches = new HashMap<>();

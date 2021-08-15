@@ -7,7 +7,9 @@ import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.UriUtils;
 
+import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -42,6 +44,7 @@ public class AnalysisService {
     }
 
     public String checkLastAnalysis(String host, String projectKey, String branch) {
-        return client.getWithAuthHeader.apply(sonarAuthHeader.authHeader.get(), host + "api/navigation/component?component=" + projectKey + "&branch=" + branch);
+        String encodedProjectKey = UriUtils.encodeQueryParam(projectKey, StandardCharsets.UTF_8);
+        return client.getWithAuthHeader.apply(sonarAuthHeader.authHeader.get(), host + "api/navigation/component?component=" + encodedProjectKey + "&branch=" + branch);
     }
 }
