@@ -45,6 +45,13 @@ pipeline:
                     connectorRef: dockerhub
                     image: maven:3.8.5-openjdk-17
                     shell: Bash
-                    command: ls -lha
+                    command: |-
+                      ls -lha
+
+                      cd SYSHub
+
+                      mvn clean install
+
+                      ls -lha SYSHub
           buildIntelligence:
             enabled: false
