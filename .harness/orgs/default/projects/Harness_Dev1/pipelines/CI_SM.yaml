@@ -37,5 +37,16 @@ pipeline:
                       type: branch
                       spec:
                         branch: main
+              - step:
+                  type: Run
+                  name: build_code
+                  identifier: build_code
+                  spec:
+                    connectorRef: dockerhub
+                    image: maven:3.8.5-openjdk-17
+                    shell: Sh
+                    command: |-
+                      mvn clean install
+                      tree deploy
           buildIntelligence:
             enabled: false
