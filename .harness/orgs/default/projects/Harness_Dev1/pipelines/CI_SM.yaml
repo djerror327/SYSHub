@@ -1,0 +1,41 @@
+pipeline:
+  name: CI_SM
+  identifier: CI_SM
+  projectIdentifier: Harness_Dev1
+  orgIdentifier: default
+  tags: {}
+  stages:
+    - stage:
+        name: Build
+        identifier: Build
+        description: ""
+        type: CI
+        spec:
+          cloneCodebase: false
+          caching:
+            enabled: true
+            override: true
+            paths: []
+          infrastructure:
+            type: KubernetesDirect
+            spec:
+              connectorRef: minikube_local
+              namespace: harness-ci
+              automountServiceAccountToken: true
+              nodeSelector: {}
+              os: Linux
+          execution:
+            steps:
+              - step:
+                  type: GitClone
+                  name: GitClone
+                  identifier: GitClone
+                  spec:
+                    connectorRef: github_connctor
+                    repoName: SYSHub
+                    build:
+                      type: branch
+                      spec:
+                        branch: main
+          buildIntelligence:
+            enabled: false
