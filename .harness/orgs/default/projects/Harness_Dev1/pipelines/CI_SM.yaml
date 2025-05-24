@@ -52,6 +52,14 @@ pipeline:
 
                       mvn clean install
 
-                      ls -lha SYSHub
+                      ls -lha deploy
+              - step:
+                  type: ArtifactoryUpload
+                  name: ArtifactoryUpload
+                  identifier: ArtifactoryUpload
+                  spec:
+                    connectorRef: antifactory
+                    target: harness_ci-libs-snapshot/com/dj/SYSHub/1.0.0/SYSHub-1.0.0.jar
+                    sourcePath: deploy/SYSHub/SYSHub-1.0.0.jar
           buildIntelligence:
             enabled: false
