@@ -46,7 +46,8 @@ pipeline:
                     image: maven:3.8.5-openjdk-17
                     shell: Sh
                     command: |-
-                      mvn clean install
                       tree deploy
+
+                      ls -lha
           buildIntelligence:
             enabled: false
