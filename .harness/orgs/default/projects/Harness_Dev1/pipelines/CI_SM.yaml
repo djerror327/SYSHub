@@ -71,6 +71,6 @@ pipeline:
                         tags:
                           - SYSHub-1.0.0
                         dockerfile: Dockerfile
-                        context: .SYSHub
+                        context: /harness/SYSHub/
           buildIntelligence:
             enabled: false
