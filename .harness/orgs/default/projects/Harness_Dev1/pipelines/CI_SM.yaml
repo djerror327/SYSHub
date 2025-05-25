@@ -15,7 +15,8 @@ pipeline:
           caching:
             enabled: true
             override: true
-            paths: []
+            paths:
+              - /root/.m2/repository
           infrastructure:
             type: KubernetesDirect
             spec:
