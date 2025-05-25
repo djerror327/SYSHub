@@ -1,9 +1,11 @@
-FROM openjdk:17-jdk-alpine
-
-# Copy the entire deploy folder content into /app in container
-COPY deploy /app
+FROM openjdk:17-jdk-slim
 
 WORKDIR /app
 
-# Assuming your main jar is inside deploy, run it like this:
-CMD ["java", "-jar", "SYSHub-1.0.0-SNAPSHOT.jar"]
+# Copy the entire deploy folder
+COPY deploy/ ./deploy/
+
+EXPOSE 8080
+
+# Run the JAR from the deploy folder
+CMD ["java", "-jar", "deploy/SYSHub/SYSHub-1.0.0.jar"]
