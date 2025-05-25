@@ -6,7 +6,7 @@ pipeline:
   tags: {}
   stages:
     - stage:
-        name: Build
+        name: CI
         identifier: Build
         description: ""
         type: CI
