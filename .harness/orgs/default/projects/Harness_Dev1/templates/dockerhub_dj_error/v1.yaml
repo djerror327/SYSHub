@@ -1,0 +1,15 @@
+template:
+  name: dockerhub_dj_error
+  type: Step
+  projectIdentifier: Harness_Dev1
+  orgIdentifier: default
+  spec:
+    type: BuildAndPushDockerRegistry
+    spec:
+      connectorRef: DockerHub_DJErrorAccount
+      repo: djerror327/syshub
+      tags:
+        - dockerhub_djerror
+      caching: false
+  identifier: dockerhub_dj_error
+  versionLabel: dockerHub_dj_error_push
