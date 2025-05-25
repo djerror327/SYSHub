@@ -1,0 +1,78 @@
+pipeline:
+  name: CI_SysHub
+  identifier: CI_SM
+  projectIdentifier: Harness_Dev1
+  orgIdentifier: default
+  tags: {}
+  stages:
+    - stage:
+        name: CI
+        identifier: Build
+        description: ""
+        type: CI
+        spec:
+          cloneCodebase: false
+          caching:
+            enabled: true
+            override: true
+            paths:
+              - /root/.m2
+          infrastructure:
+            type: KubernetesDirect
+            spec:
+              connectorRef: minikube_local
+              namespace: harness-ci
+              automountServiceAccountToken: true
+              nodeSelector: {}
+              os: Linux
+          execution:
+            steps:
+              - step:
+                  type: GitClone
+                  name: GitClone
+                  identifier: GitClone
+                  spec:
+                    connectorRef: github_connctor
+                    repoName: SYSHub
+                    build:
+                      type: branch
+                      spec:
+                        branch: main
+              - step:
+                  type: Run
+                  name: build_code
+                  identifier: build_code
+                  spec:
+                    connectorRef: dockerhub
+                    image: maven:3.8.5-openjdk-17
+                    shell: Bash
+                    command: |-
+                      ls -lha
+
+                      cd SYSHub
+
+                      mvn -Dmaven.repo.local=/root/.m2 clean install
+
+                      ls -lha deploy/SYSHub
+              - parallel:
+                  - step:
+                      type: ArtifactoryUpload
+                      name: ArtifactoryUpload
+                      identifier: ArtifactoryUpload
+                      spec:
+                        connectorRef: antifactory
+                        target: harness_ci-libs-snapshot/com/dj/SYSHub/1.0.0-SNAPSHOT/SYSHub-1.0.0-SNAPSHOT.jar
+                        sourcePath: SYSHub/deploy/SYSHub/SYSHub-1.0.0-SNAPSHOT.jar
+                  - step:
+                      type: BuildAndPushDockerRegistry
+                      name: BuildAndPushDockerRegistry_1
+                      identifier: BuildAndPushDockerRegistry_1
+                      spec:
+                        connectorRef: DockerHub_DJErrorAccount
+                        repo: djerror327/syshub
+                        tags:
+                          - SYSHub-1.0.0
+                        dockerfile: Dockerfile
+                        context: SYSHub/deploy/SYSHub/
+          buildIntelligence:
+            enabled: false
