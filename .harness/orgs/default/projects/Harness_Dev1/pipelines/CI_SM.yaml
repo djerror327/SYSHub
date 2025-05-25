@@ -71,4 +71,4 @@ pipeline:
                         versionLabel: dockerHub_dj_error_push
                         gitBranch: main
           buildIntelligence:
-            enabled: false
+            enabled: true
