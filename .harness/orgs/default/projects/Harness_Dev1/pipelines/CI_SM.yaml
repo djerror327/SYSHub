@@ -71,7 +71,7 @@ pipeline:
                         repo: djerror327/syshub
                         tags:
                           - SYSHub-1.0.0
-                        dockerfile: Dockerfile
-                        context: /harness/SYSHub/
+                        dockerfile: SYSHub/Dockerfile
+                        context: .
           buildIntelligence:
             enabled: false
