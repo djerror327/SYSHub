@@ -38,22 +38,6 @@ pipeline:
                       type: branch
                       spec:
                         branch: main
-              - step:
-                  type: Run
-                  name: build_code
-                  identifier: build_code
-                  spec:
-                    connectorRef: dockerhub
-                    image: maven:3.8.5-openjdk-17
-                    shell: Bash
-                    command: |-
-                      ls -lha
-
-                      cd SYSHub
-
-                      mvn -Dmaven.repo.local=/root/.m2 clean install
-
-                      ls -lha deploy/SYSHub
               - parallel:
                   - step:
                       type: ArtifactoryUpload
@@ -73,6 +57,6 @@ pipeline:
                         tags:
                           - SYSHub-1.0.0
                         dockerfile: Dockerfile
-                        context: SYSHub/deploy/SYSHub/
+                        context: .
           buildIntelligence:
             enabled: false
