@@ -50,6 +50,7 @@ pipeline:
                       apt update && apt install tree
                       tree
                       ls -la
+                      ls -la SYSHub
                       pwd
                 contextType: Pipeline
               - parallel:
