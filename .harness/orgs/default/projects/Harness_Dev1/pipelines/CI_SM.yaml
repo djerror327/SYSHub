@@ -64,11 +64,10 @@ pipeline:
                         target: harness_ci-libs-snapshot/com/dj/SYSHub/1.0.0-SNAPSHOT/SYSHub-1.0.0-SNAPSHOT.jar
                         sourcePath: SYSHub/deploy/SYSHub/SYSHub-1.0.0-SNAPSHOT.jar
                   - step:
-                      name: BuildAndPushDockerRegistry
-                      identifier: BuildAndPushDockerRegistry
+                      name: pushDockerImages
+                      identifier: pushDockerImages
                       template:
                         templateRef: dockerhub_dj_error
                         versionLabel: dockerHub_dj_error_push
-                        gitBranch: main
           buildIntelligence:
             enabled: true
