@@ -10,9 +10,9 @@ template:
     spec:
       connectorRef: DockerHub_DJErrorAccount
       repo: djerror327/syshub
-      buildContext: SYSHub/deploy
-      dockerfile: SYSHub/deploy/Dockerfile
       tags:
         - 1.0.0-SNAPSHOT
         - latest
       caching: false
+      dockerfile: deploy/Dockerfile
+      context: deploy
