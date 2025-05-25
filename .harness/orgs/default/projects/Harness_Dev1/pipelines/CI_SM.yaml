@@ -54,13 +54,21 @@ pipeline:
                       mvn -Dmaven.repo.local=/root/.m2 clean install
 
                       ls -lha deploy
-              - step:
-                  type: ArtifactoryUpload
-                  name: ArtifactoryUpload
-                  identifier: ArtifactoryUpload
-                  spec:
-                    connectorRef: antifactory
-                    target: harness_ci-libs-snapshot/com/dj/SYSHub/1.0.0-SNAPSHOT/SYSHub-1.0.0-SNAPSHOT.jar
-                    sourcePath: SYSHub/deploy/SYSHub/SYSHub-1.0.0-SNAPSHOT.jar
+              - parallel:
+                  - step:
+                      type: ArtifactoryUpload
+                      name: ArtifactoryUpload
+                      identifier: ArtifactoryUpload
+                      spec:
+                        connectorRef: antifactory
+                        target: harness_ci-libs-snapshot/com/dj/SYSHub/1.0.0-SNAPSHOT/SYSHub-1.0.0-SNAPSHOT.jar
+                        sourcePath: SYSHub/deploy/SYSHub/SYSHub-1.0.0-SNAPSHOT.jar
+                  - step:
+                      name: BuildAndPushDockerRegistry
+                      identifier: BuildAndPushDockerRegistry
+                      template:
+                        templateRef: dockerhub_dj_error
+                        versionLabel: dockerHub_dj_error_push
+                        gitBranch: main
           buildIntelligence:
             enabled: false
