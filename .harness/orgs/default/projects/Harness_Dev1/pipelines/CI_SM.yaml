@@ -16,7 +16,7 @@ pipeline:
             enabled: true
             override: true
             paths:
-              - /root/.m2/repository
+              - /root/.m2
           infrastructure:
             type: KubernetesDirect
             spec:
@@ -51,7 +51,7 @@ pipeline:
 
                       cd SYSHub
 
-                      mvn clean install
+                      mvn -Dmaven.repo.local=/root/.m2 clean install
 
                       ls -lha deploy
               - step:
