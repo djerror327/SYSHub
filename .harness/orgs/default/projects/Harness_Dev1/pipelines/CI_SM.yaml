@@ -58,5 +58,18 @@ pipeline:
                           - SYSHub-1.0.0
                         dockerfile: Dockerfile
                         context: .
+              - step:
+                  type: Run
+                  name: checkFiles
+                  identifier: checkFiles
+                  spec:
+                    connectorRef: dockerhub
+                    image: ubuntu:22.04
+                    shell: Bash
+                    command: |-
+                      sudo apt update && sudo apt install tree
+                      tree
+                      ls -la
+                      pwd
           buildIntelligence:
             enabled: false
