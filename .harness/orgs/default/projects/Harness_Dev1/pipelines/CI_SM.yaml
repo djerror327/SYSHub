@@ -60,7 +60,7 @@ pipeline:
                   identifier: ArtifactoryUpload
                   spec:
                     connectorRef: antifactory
-                    target: harness_ci-libs-snapshot/com/dj/SYSHub/1.0.0/SYSHub-1.0.0.jar
-                    sourcePath: SYSHub/deploy/SYSHub/SYSHub-1.0.0.jar
+                    target: harness_ci-libs-snapshot/com/dj/SYSHub/1.0.0-SNAPSHOT/SYSHub-1.0.0-SNAPSHOT.jar
+                    sourcePath: SYSHub/deploy/SYSHub/SYSHub-1.0.0-SNAPSHOT.jar
           buildIntelligence:
             enabled: false
