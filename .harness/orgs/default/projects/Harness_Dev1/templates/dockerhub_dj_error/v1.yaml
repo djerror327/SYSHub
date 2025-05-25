@@ -1,5 +1,7 @@
 template:
   name: dockerhub_dj_error
+  identifier: dockerhub_dj_error
+  versionLabel: dockerHub_dj_error_push
   type: Step
   projectIdentifier: Harness_Dev1
   orgIdentifier: default
@@ -8,8 +10,9 @@ template:
     spec:
       connectorRef: DockerHub_DJErrorAccount
       repo: djerror327/syshub
+      buildContext: SYSHub/deploy
+      dockerfile: SYSHub/deploy/Dockerfile
       tags:
-        - dockerhub_djerror
+        - 1.0.0-SNAPSHOT
+        - latest
       caching: false
-  identifier: dockerhub_dj_error
-  versionLabel: dockerHub_dj_error_push
