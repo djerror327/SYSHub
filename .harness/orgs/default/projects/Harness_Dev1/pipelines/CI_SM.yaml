@@ -70,4 +70,4 @@ pipeline:
                         templateRef: dockerhub_dj_error
                         versionLabel: dockerHub_dj_error_push
           buildIntelligence:
-            enabled: true
+            enabled: false
