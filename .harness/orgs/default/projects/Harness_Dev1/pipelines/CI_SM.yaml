@@ -47,7 +47,7 @@ pipeline:
                     image: ubuntu:22.04
                     shell: Bash
                     command: |-
-                      sudo apt update && sudo apt install tree
+                      apt update && apt install tree
                       tree
                       ls -la
                       pwd
