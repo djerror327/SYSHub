@@ -9,4 +9,4 @@ EXPOSE 8080
 
 # Run the JAR from the deploy folder
 
-CMD ["java", "-jar", "deploy/SYSHub-1.0.0.jar"]
+CMD ["java", "-jar", "deploy/SYSHub/SYSHub-1.0.0.jar"]
