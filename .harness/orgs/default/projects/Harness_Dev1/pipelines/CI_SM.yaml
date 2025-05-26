@@ -67,6 +67,8 @@ pipeline:
                     advanced:
                       log:
                         level: debug
+                      args:
+                        cli: "-Dsonar.organization=java-test"
                     settings:
                       sonar.organization: java-test
                     auth:
