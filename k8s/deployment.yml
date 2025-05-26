@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: syshub
+  labels:
+    app: syshub
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: syshub
+  template:
+    metadata:
+      labels:
+        app: syshub
+    spec:
+      containers:
+        - name: syshub
+          image: djerror327/syshub:SYSHub-1.0.0
+          ports:
+            - containerPort: 8080
