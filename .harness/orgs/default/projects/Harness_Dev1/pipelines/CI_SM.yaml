@@ -53,10 +53,10 @@ pipeline:
                       log:
                         level: debug
                       args:
-                        cli: "-Dsonar.organization=java-test -Dsonar.exclusions=**/*.java"
-                    settings:
-                      sonar.organization: java-test
-                      sonar.exclusions: "**/*.java"
+                        cli: "-Dsonar.organization=java-test -Dsonar.exclusions=**/*.java,**/*.js,**/*.ts,**/*.css  -Dsonar.nodejs.maxspace=4096 -Dsonar.javascript.node.maxspace=4096 -Dsonar.ce.javaOpts=-Xmx2048m"
+                    resources:
+                      limits:
+                        memory: 6Gi
                     auth:
                       access_token: 7d2113669629d4ef75c18a7f70010e1d8e8588b8
                       domain: https://sonarcloud.io
