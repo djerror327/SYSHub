@@ -1,0 +1,43 @@
+pipeline:
+  name: Syshub
+  identifier: Syshub
+  projectIdentifier: Harness_Dev1
+  orgIdentifier: default
+  tags: {}
+  properties:
+    ci:
+      codebase:
+        connectorRef: github_connctor
+        repoName: SYSHub
+        build: <+input>
+  stages:
+    - stage:
+        name: CI
+        identifier: CI
+        description: ""
+        type: CI
+        spec:
+          cloneCodebase: true
+          caching:
+            enabled: true
+            override: true
+          infrastructure:
+            type: KubernetesDirect
+            spec:
+              connectorRef: minikube_local
+              namespace: "harness-ci "
+              automountServiceAccountToken: true
+              nodeSelector: {}
+              os: Linux
+          execution:
+            steps:
+              - step:
+                  type: Run
+                  name: dummy
+                  identifier: dummy
+                  spec:
+                    connectorRef: dockerhub
+                    image: ubuntu:22.04
+                    shell: Bash
+                    command: ls -l
+                  description: CI dummy
