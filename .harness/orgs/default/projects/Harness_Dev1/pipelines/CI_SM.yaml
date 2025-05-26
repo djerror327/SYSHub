@@ -62,6 +62,7 @@ pipeline:
                     config: default
                     target:
                       type: repository
+                      workspace: /harness/SYSHub
                       detection: auto
                     advanced:
                       log:
