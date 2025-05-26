@@ -40,7 +40,7 @@ pipeline:
                         branch: main
               - step:
                   type: Run
-                  name: checkFiles
+                  name: SonarScan
                   identifier: checkFiles
                   spec:
                     connectorRef: dockerhub
@@ -53,15 +53,26 @@ pipeline:
                       ls -la SYSHub
                       pwd
                 contextType: Pipeline
+              - step:
+                  type: Sonarqube
+                  name: SonarqubeScan
+                  identifier: SonarqubeScan
+                  spec:
+                    mode: orchestration
+                    config: default
+                    target:
+                      type: repository
+                      detection: auto
+                    advanced:
+                      log:
+                        level: debug
+                    auth:
+                      access_token: 7d2113669629d4ef75c18a7f70010e1d8e8588b8
+                      domain: https://sonarcloud.io
+                      ssl: true
+                    tool:
+                      project_key: Syshub
               - parallel:
-                  - step:
-                      type: ArtifactoryUpload
-                      name: ArtifactoryUpload
-                      identifier: ArtifactoryUpload
-                      spec:
-                        connectorRef: antifactory
-                        target: harness_ci-libs-snapshot/com/dj/SYSHub/1.0.0-SNAPSHOT/SYSHub-1.0.0-SNAPSHOT.jar
-                        sourcePath: SYSHub/deploy/SYSHub/SYSHub-1.0.0-SNAPSHOT.jar
                   - step:
                       type: BuildAndPushDockerRegistry
                       name: BuildAndPushDockerRegistry_1
@@ -73,5 +84,13 @@ pipeline:
                           - SYSHub-1.0.0
                         dockerfile: SYSHub/Dockerfile
                         context: .
+                  - step:
+                      type: ArtifactoryUpload
+                      name: ArtifactoryUpload
+                      identifier: ArtifactoryUpload
+                      spec:
+                        connectorRef: antifactory
+                        target: harness_ci-libs-snapshot/com/dj/SYSHub/1.0.0-SNAPSHOT/SYSHub-1.0.0-SNAPSHOT.jar
+                        sourcePath: SYSHub/deploy/SYSHub/SYSHub-1.0.0-SNAPSHOT.jar
           buildIntelligence:
             enabled: false
