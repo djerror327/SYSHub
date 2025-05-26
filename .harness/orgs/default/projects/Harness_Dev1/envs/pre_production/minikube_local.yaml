@@ -1,0 +1,8 @@
+environment:
+  name: minikube_local
+  identifier: minikube_local
+  description: ""
+  tags: {}
+  type: PreProduction
+  orgIdentifier: default
+  projectIdentifier: Harness_Dev1
