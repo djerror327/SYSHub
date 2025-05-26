@@ -67,6 +67,8 @@ pipeline:
                     advanced:
                       log:
                         level: debug
+                      args:
+                        cli: "-Dsonar.organization=java-test"
                     auth:
                       access_token: 7d2113669629d4ef75c18a7f70010e1d8e8588b8
                       domain: https://sonarcloud.io
