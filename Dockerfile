@@ -3,7 +3,7 @@ FROM openjdk:17-jdk-slim
 WORKDIR /app
 
 # Copy the entire deploy folder
-COPY deploy/ ./deploy/
+COPY ./SYSHub/deploy/ ./deploy/
 
 EXPOSE 8080
 
