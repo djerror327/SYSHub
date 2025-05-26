@@ -1,0 +1,13 @@
+infrastructureDefinition:
+  name: minikube_local_infa
+  identifier: minikube_local_infa
+  orgIdentifier: default
+  projectIdentifier: Harness_Dev1
+  environmentRef: minikube_local
+  deploymentType: Kubernetes
+  type: KubernetesDirect
+  spec:
+    connectorRef: minikube_local
+    namespace: syshub
+    releaseName: release-<+INFRA_KEY_SHORT_ID>
+  allowSimultaneousDeployments: false
