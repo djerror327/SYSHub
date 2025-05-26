@@ -52,6 +52,8 @@ pipeline:
                     advanced:
                       log:
                         level: debug
+                      args:
+                        cli: "-Dsonar.organization=java-test -Dsonar.exclusions=**/*.java"
                     settings:
                       sonar.organization: java-test
                       sonar.exclusions: "**/*.java"
