@@ -1,0 +1,25 @@
+service:
+  name: cd_minikube
+  identifier: cd_minikube
+  serviceDefinition:
+    type: Kubernetes
+    spec:
+      manifests:
+        - manifest:
+            identifier: syshubDeplyk8s
+            type: K8sManifest
+            spec:
+              store:
+                type: Github
+                spec:
+                  connectorRef: github_connctor
+                  gitFetchType: Branch
+                  paths:
+                    - ./k8s
+                  repoName: SYSHub
+                  branch: main
+              skipResourceVersioning: false
+              enableDeclarativeRollback: false
+  gitOpsEnabled: false
+  orgIdentifier: default
+  projectIdentifier: Harness_Dev1
