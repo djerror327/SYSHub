@@ -39,21 +39,6 @@ pipeline:
                       spec:
                         branch: main
               - step:
-                  type: Run
-                  name: FilePathCheck
-                  identifier: checkFiles
-                  spec:
-                    connectorRef: dockerhub
-                    image: ubuntu:22.04
-                    shell: Bash
-                    command: |-
-                      apt update && apt install tree
-                      tree
-                      ls -la
-                      ls -la SYSHub
-                      pwd
-                contextType: Pipeline
-              - step:
                   type: Sonarqube
                   name: SonarqubeScan
                   identifier: SonarqubeScan
@@ -77,6 +62,21 @@ pipeline:
                       ssl: true
                     tool:
                       project_key: Syshub
+              - step:
+                  type: Run
+                  name: FilePathCheck
+                  identifier: checkFiles
+                  spec:
+                    connectorRef: dockerhub
+                    image: ubuntu:22.04
+                    shell: Bash
+                    command: |-
+                      apt update && apt install tree
+                      tree
+                      ls -la
+                      ls -la SYSHub
+                      pwd
+                contextType: Pipeline
               - parallel:
                   - step:
                       type: BuildAndPushDockerRegistry
