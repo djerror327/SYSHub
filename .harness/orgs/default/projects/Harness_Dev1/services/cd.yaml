@@ -6,7 +6,7 @@ service:
     spec:
       manifests:
         - manifest:
-            identifier: syshubDeplyk8s
+            identifier: BlueK8sManifest
             type: K8sManifest
             spec:
               store:
@@ -15,7 +15,8 @@ service:
                   connectorRef: github_connctor
                   gitFetchType: Branch
                   paths:
-                    - ./k8s
+                    - k8s/service.yml
+                    - k8s/syshub-blue.yaml
                   repoName: SYSHub
                   branch: main
               skipResourceVersioning: false
