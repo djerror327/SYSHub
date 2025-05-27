@@ -6,32 +6,6 @@ pipeline:
   tags: {}
   stages:
     - stage:
-        name: Approval for CD
-        identifier: Approval_for_CD
-        description: ""
-        type: Approval
-        spec:
-          execution:
-            steps:
-              - step:
-                  name: approval for cd
-                  identifier: approval_for_cd
-                  type: HarnessApproval
-                  timeout: 1d
-                  spec:
-                    approvalMessage: |-
-                      Please review the following information
-                      and approve the pipeline progression
-                    includePipelineExecutionHistory: true
-                    approvers:
-                      minimumCount: 1
-                      disallowPipelineExecutor: false
-                      userGroups:
-                        - account._account_all_users
-                    isAutoRejectEnabled: false
-                    approverInputs: []
-        tags: {}
-    - stage:
         name: minikube_bluegreen
         identifier: minikube_bluegreen
         description: ""
@@ -77,6 +51,32 @@ pipeline:
                   timeout: 10m
                   spec:
                     skipDryRun: false
+              - step:
+                  type: HarnessApproval
+                  name: delete_red
+                  identifier: delete_red
+                  spec:
+                    approvalMessage: Please review the following information and approve the pipeline progression
+                    includePipelineExecutionHistory: true
+                    isAutoRejectEnabled: false
+                    approvers:
+                      userGroups:
+                        - account._account_all_users
+                      minimumCount: 1
+                      disallowPipelineExecutor: false
+                    approverInputs: []
+                  timeout: 1d
+              - step:
+                  type: K8sDelete
+                  name: K8sDelete_1
+                  identifier: K8sDelete_1
+                  spec:
+                    deleteResources:
+                      type: ResourceName
+                      spec:
+                        resourceNames:
+                          - deployment syshub-green
+                  timeout: 10m
             rollbackSteps:
               - step:
                   name: Swap primary with stage service
