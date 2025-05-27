@@ -15,8 +15,7 @@ service:
                   connectorRef: github_connctor
                   gitFetchType: Branch
                   paths:
-                    - k8s/service.yml
-                    - k8s/syshub-blue.yaml
+                    - ./k8s
                   repoName: SYSHub
                   branch: main
               skipResourceVersioning: false
