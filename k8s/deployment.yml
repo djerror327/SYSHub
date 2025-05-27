@@ -17,5 +17,6 @@ spec:
       containers:
         - name: syshub
           image: djerror327/syshub:SYSHub-1.0.0
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
