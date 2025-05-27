@@ -12,36 +12,6 @@ pipeline:
         build: <+input>
   stages:
     - stage:
-        name: CI
-        identifier: CI
-        description: ""
-        type: CI
-        spec:
-          cloneCodebase: true
-          caching:
-            enabled: true
-            override: true
-          infrastructure:
-            type: KubernetesDirect
-            spec:
-              connectorRef: minikube_local
-              namespace: "harness-ci "
-              automountServiceAccountToken: true
-              nodeSelector: {}
-              os: Linux
-          execution:
-            steps:
-              - step:
-                  type: Run
-                  name: dummy
-                  identifier: dummy
-                  spec:
-                    connectorRef: dockerhub
-                    image: ubuntu:22.04
-                    shell: Bash
-                    command: ls -l
-                  description: CI dummy
-    - stage:
         name: Approval for CD
         identifier: Approval_for_CD
         description: ""
