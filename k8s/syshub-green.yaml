@@ -1,18 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: syshub
+  name: syshub-green
   labels:
     app: syshub
+    harness.io/color: green
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: syshub
+      harness.io/color: green
   template:
     metadata:
       labels:
         app: syshub
+        harness.io/color: green
     spec:
       containers:
         - name: syshub

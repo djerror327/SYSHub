@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: syshub-blue
+  labels:
+    app: syshub
+    harness.io/color: blue
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: syshub
+      harness.io/color: blue
+  template:
+    metadata:
+      labels:
+        app: syshub
+        harness.io/color: blue
+    spec:
+      containers:
+        - name: syshub
+          image: djerror327/syshub:SYSHub-1.0.0
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8080

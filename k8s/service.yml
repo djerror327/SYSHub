@@ -5,9 +5,9 @@ metadata:
 spec:
   selector:
     app: syshub
+    harness.io/color: blue   # This will be swapped to green on switch
   ports:
     - protocol: TCP
       port: 80
       targetPort: 8080
-      # nodePort: 30080 ← removed to prevent port conflict
   type: NodePort
