@@ -76,7 +76,7 @@ pipeline:
                       spec:
                         resourceNames:
                           - deployment syshub-green
-                  timeout: 10m
+                  timeout: 10h
             rollbackSteps:
               - step:
                   name: Swap primary with stage service
