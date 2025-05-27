@@ -15,7 +15,8 @@ service:
                   connectorRef: github_connctor
                   gitFetchType: Branch
                   paths:
-                    - ./k8s
+                    - ./k8s/green/service.yml
+                    - ./k8s/green/syshub-green.yaml
                   repoName: SYSHub
                   branch: main
               skipResourceVersioning: false
