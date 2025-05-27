@@ -29,6 +29,31 @@ pipeline:
                   spec:
                     skipDryRun: false
                     pruningEnabled: false
+                    manifests:
+                      - manifest:
+                          identifier: blueDeploymentManifest
+                          type: KubernetesManifest
+                          spec:
+                            store:
+                              type: Git
+                              spec:
+                                connectorRef: github_connector
+                                gitFetchType: Branch
+                                paths:
+                                  - manifests/syshub-blue.yaml
+                                branch: main
+                      - manifest:
+                          identifier: serviceManifest
+                          type: KubernetesManifest
+                          spec:
+                            store:
+                              type: Git
+                              spec:
+                                connectorRef: github_connector
+                                gitFetchType: Branch
+                                paths:
+                                  - manifests/syshub-service.yaml
+                                branch: main
               - step:
                   type: HarnessApproval
                   name: BlueValidation
@@ -45,6 +70,39 @@ pipeline:
                     approverInputs: []
                   timeout: 1d
               - step:
+                  name: Deploy Green
+                  identifier: greenDeployment
+                  type: K8sBlueGreenDeploy
+                  timeout: 10m
+                  spec:
+                    skipDryRun: false
+                    pruningEnabled: false
+                    manifests:
+                      - manifest:
+                          identifier: greenDeploymentManifest
+                          type: KubernetesManifest
+                          spec:
+                            store:
+                              type: Git
+                              spec:
+                                connectorRef: github_connector
+                                gitFetchType: Branch
+                                paths:
+                                  - manifests/syshub-green.yaml
+                                branch: main
+                      - manifest:
+                          identifier: serviceManifest
+                          type: KubernetesManifest
+                          spec:
+                            store:
+                              type: Git
+                              spec:
+                                connectorRef: github_connector
+                                gitFetchType: Branch
+                                paths:
+                                  - manifests/syshub-service.yaml
+                                branch: main
+              - step:
                   name: Swap primary with stage service
                   identifier: bgSwapServices
                   type: K8sBGSwapServices
@@ -53,10 +111,10 @@ pipeline:
                     skipDryRun: false
               - step:
                   type: HarnessApproval
-                  name: delete_red
+                  name: Delete Old Deployment Approval
                   identifier: delete_red
                   spec:
-                    approvalMessage: Please review the following information and approve the pipeline progression
+                    approvalMessage: Please approve deletion of old deployment
                     includePipelineExecutionHistory: true
                     isAutoRejectEnabled: false
                     approvers:
@@ -68,15 +126,15 @@ pipeline:
                   timeout: 1d
               - step:
                   type: K8sDelete
-                  name: K8sDelete_1
+                  name: Delete Old Deployment
                   identifier: K8sDelete_1
                   spec:
                     deleteResources:
                       type: ResourceName
                       spec:
                         resourceNames:
-                          - deployment syshub-green
-                  timeout: 10h
+                          - deployment syshub-blue
+                  timeout: 10m
             rollbackSteps:
               - step:
                   name: Swap primary with stage service
