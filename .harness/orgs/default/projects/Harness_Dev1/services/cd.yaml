@@ -6,7 +6,7 @@ service:
     spec:
       manifests:
         - manifest:
-            identifier: syshubDeplyk8s
+            identifier: BlueK8sManifest
             type: K8sManifest
             spec:
               store:

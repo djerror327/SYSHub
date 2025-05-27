@@ -6,35 +6,8 @@ pipeline:
   tags: {}
   stages:
     - stage:
-        name: Approval for CD
-        identifier: Approval_for_CD
-        description: ""
-        type: Approval
-        spec:
-          execution:
-            steps:
-              - step:
-                  name: approval for cd
-                  identifier: approval_for_cd
-                  type: HarnessApproval
-                  timeout: 1d
-                  spec:
-                    approvalMessage: |-
-                      Please review the following information
-                      and approve the pipeline progression
-                    includePipelineExecutionHistory: true
-                    approvers:
-                      minimumCount: 1
-                      disallowPipelineExecutor: false
-                      userGroups:
-                        - account._account_all_users
-                    isAutoRejectEnabled: false
-                    approverInputs: []
-        tags: {}
-    - stage:
         name: minikube_bluegreen
         identifier: minikube_bluegreen
-        description: ""
         type: Deployment
         spec:
           deploymentType: Kubernetes
@@ -48,19 +21,45 @@ pipeline:
           execution:
             steps:
               - step:
-                  name: Stage Deployment
-                  identifier: stageDeployment
+                  name: Deploy Green
+                  identifier: deployGreen
                   type: K8sBlueGreenDeploy
                   timeout: 10m
                   spec:
                     skipDryRun: false
                     pruningEnabled: false
+                    manifests:
+                      - manifest:
+                          identifier: greenDeploymentManifest
+                          type: KubernetesManifest
+                          spec:
+                            store:
+                              type: Git
+                              spec:
+                                connectorRef: github_connector
+                                gitFetchType: Branch
+                                branch: main
+                                paths:
+                                  - k8s/green/syshub-green.yaml
+                      - manifest:
+                          identifier: serviceManifest
+                          type: KubernetesManifest
+                          spec:
+                            store:
+                              type: Git
+                              spec:
+                                connectorRef: github_connector
+                                gitFetchType: Branch
+                                branch: main
+                                paths:
+                                  - k8s/green/service.yml
               - step:
                   type: HarnessApproval
-                  name: BlueValidation
-                  identifier: BlueValidation
+                  name: Validate Green
+                  identifier: validateGreen
+                  timeout: 1d
                   spec:
-                    approvalMessage: Please review the following information and approve the pipeline progression
+                    approvalMessage: Please validate the green deployment
                     includePipelineExecutionHistory: true
                     isAutoRejectEnabled: false
                     approvers:
@@ -69,23 +68,47 @@ pipeline:
                       minimumCount: 1
                       disallowPipelineExecutor: false
                     approverInputs: []
-                  timeout: 1d
               - step:
-                  name: Swap primary with stage service
-                  identifier: bgSwapServices
+                  name: Swap Services
+                  identifier: swapServices
                   type: K8sBGSwapServices
                   timeout: 10m
                   spec:
                     skipDryRun: false
+              - step:
+                  type: HarnessApproval
+                  name: Approve Delete Blue
+                  identifier: approveDeleteBlue
+                  timeout: 1d
+                  spec:
+                    approvalMessage: Approve deletion of old blue deployment
+                    includePipelineExecutionHistory: true
+                    isAutoRejectEnabled: false
+                    approvers:
+                      userGroups:
+                        - account._account_all_users
+                      minimumCount: 1
+                      disallowPipelineExecutor: false
+                    approverInputs: []
+              - step:
+                  name: Delete Blue Deployment
+                  identifier: deleteBlueDeployment
+                  type: K8sDelete
+                  timeout: 10m
+                  spec:
+                    deleteResources:
+                      type: ResourceName
+                      spec:
+                        resourceNames:
+                          - deployment syshub-blue
             rollbackSteps:
               - step:
-                  name: Swap primary with stage service
-                  identifier: rollbackBgSwapServices
+                  name: Rollback Swap
+                  identifier: rollbackSwap
                   type: K8sBGSwapServices
                   timeout: 10m
                   spec:
                     skipDryRun: false
-        tags: {}
         failureStrategies:
           - onFailure:
               errors:
