@@ -68,7 +68,7 @@ pipeline:
                     approverInputs: []
         tags: {}
     - stage:
-        name: minikube_deploy
+        name: minikube_rolling
         identifier: minikube_deploy
         description: ""
         type: Deployment
